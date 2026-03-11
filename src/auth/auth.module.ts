@@ -3,32 +3,31 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as admin from 'firebase-admin';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
+import { FirebaseAuthGuard } from './guards/firebase-auth.guard';
+import { UserModule } from 'src/user/user.module';
 
-// A custom provider is just an object that tells NestJS:
-// "here's a token (FIREBASE_APP), here's how to create it"
+// This provider will initialize the Firebase Admin SDK and make it available for injection
 const firebaseProvider = {
-  provide: 'FIREBASE_APP', // the injection token - like a key in NestJS's DI container
-  inject: [ConfigService],  // NestJS will pass ConfigService into the factory below
+  provide: 'FIREBASE_APP', 
+  inject: [ConfigService],
   useFactory: (configService: ConfigService) => {
-    // useFactory means: run this function to produce the value for this provider
     return admin.initializeApp({
       credential: admin.credential.cert({
         projectId: configService.get<string>('FIREBASE_PROJECT_ID'),
         clientEmail: configService.get<string>('FIREBASE_CLIENT_EMAIL'),
-        // Firebase stores the private key with literal \n in the env string.
-        // .replace() converts those into real newline characters.
         privateKey: configService
           .get<string>('FIREBASE_PRIVATE_KEY')
-          ?.replace(/\\n/g, '\n'),
+          ?.replace(/\\n/g, '\n'), //Added this cos env would escape newlines in the priv key. 
       }),
     });
   },
 };
 
+
 @Module({
-  imports: [ConfigModule], // needed so ConfigService is available to inject above
+  imports: [ConfigModule, UserModule],
   controllers: [AuthController],
-  providers: [firebaseProvider, AuthService], // register both so NestJS knows about them
-  exports: [AuthService], // export AuthService so other modules (e.g. guards) can use it
+  providers: [firebaseProvider, AuthService, FirebaseAuthGuard],
+  exports: [AuthService, FirebaseAuthGuard], 
 })
 export class AuthModule {}
