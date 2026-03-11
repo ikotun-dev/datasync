@@ -3,33 +3,6 @@
 A data-sharing API built with NestJS. 
 
 
-
-## API Endpoints
-
-All endpoints require a valid Firebase Bearer token in the `Authorization` header.
-
-### User A
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/form/company-details` | Submit company data (name, number of users, number of products). Percentage is auto-calculated. |
-| GET | `/form/my-submissions` | View all of User A's form submissions |
-| GET | `/form/my-uploads` | View all images uploaded to User A's account by User B |
-
-### User B
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/form/latest/:userAId` | View User A's most recent form submission |
-| POST | `/form/upload/:userAId` | Upload an image to User A's account (jpg, jpeg, png, gif -- max 5MB) |
-
-### Auth
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/auth/profile` | Returns the authenticated user's profile |
-
-
 ## Setup
 
 ### Prerequisites
