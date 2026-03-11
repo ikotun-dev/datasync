@@ -16,7 +16,7 @@ export class UserService {
   //using findOneOrCreate to create a user if it doesn't exist in our db but does on firebase
   async findOneOrCreate(createUserDto: CreateUserDto): Promise<User> {
     try {
-      let user = await this.userRepository.findOne({ where: { firebaseUid: createUserDto.firebaseUid } });
+      let user = await this.userRepository.findOne({ where: { email: createUserDto.email } });
       if (!user) {
         user = this.userRepository.create(createUserDto);
         await this.userRepository.save(user);
@@ -26,21 +26,5 @@ export class UserService {
       console.log('Error in findOneOrCreate:', error);
     }
   }
-
-
-  findAll() {
-    return `This action returns all user`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
+  
 }

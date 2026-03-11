@@ -1,18 +1,27 @@
-//This holds the file user B uploads. 
-
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+// Stores files uploaded by User B, linked to User A's account
+import { User } from 'src/user/entities/user.entity';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
-export class File{
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+export class Upload {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column()
-    url: string;
+  // Path/URL to the stored file
+  @Column()
+  fileUrl: string;
 
-    @CreateDateColumn()
-    createdAt: Date;
+  // Original filename for reference
+  @Column()
+  fileName: string;
 
-    @UpdateDateColumn()
-    updatedAt: Date;
+  // The User A account this file belongs to
+  @ManyToOne(() => User, (user) => user.uploads, { onDelete: 'CASCADE' })
+  user: User;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
