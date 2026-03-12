@@ -2,7 +2,9 @@
 
 A data-sharing API built with NestJS. 
 
+## Documentation
 
+Full Postman API documentation here: [datasync-docs](https://documenter.getpostman.com/view/24950715/2sBXiesu8E#c1db1179-f1b0-4b37-be39-a68198f39352)
 ## Setup
 
 ### Prerequisites
